@@ -26,4 +26,3 @@ aplicando buenas prácticas de ciencia de datos.
 ##  EL PROYECTO CUMPLE CON
 - ✔️ Limpieza de datos
 - ✔️ Generación de dataset final
-
