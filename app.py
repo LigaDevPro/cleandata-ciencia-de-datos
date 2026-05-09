@@ -51,3 +51,28 @@ for col in df.select_dtypes(include="object"):
     )
 
 print("\nTexto normalizado correctamente.")
+
+
+# Eliminar columnas completamente vacías
+df.dropna(axis=1, how="all", inplace=True)
+
+# Eliminar columnas con un único valor
+for col in df.columns:
+
+    if df[col].nunique(dropna=True) <= 1:
+
+        print(f"\nColumna eliminada por poca utilidad: {col}")
+
+        df.drop(columns=col, inplace=True)
+
+# Mostrar valores nulos
+print("\n================ VALORES NULOS ================\n")
+
+print(df.isnull().sum())
+
+# Eliminar columnas con más del 70% de nulos
+limite_nulos = len(df) * 0.70
+
+df = df.loc[:, df.isnull().sum() < limite_nulos]
+
+print("\nTratamiento de nulos finalizado.")
