@@ -32,3 +32,22 @@ df.drop_duplicates(inplace=True)
 df.dropna(how="all", inplace=True)
 
 print("\nFilas duplicadas y vacías eliminadas.")
+
+for col in df.select_dtypes(include="object"):
+
+    # Convertir a string
+    df[col] = df[col].astype(str)
+
+    # Eliminar espacios innecesarios
+    df[col] = df[col].str.strip()
+
+    # Convertir texto a minúsculas
+    df[col] = df[col].str.lower()
+
+    # Reemplazar valores vacíos por NaN
+    df[col] = df[col].replace(
+        ["", " ", "nan", "none", "null"],
+        np.nan
+    )
+
+print("\nTexto normalizado correctamente.")
