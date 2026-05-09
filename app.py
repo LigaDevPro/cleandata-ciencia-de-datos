@@ -23,3 +23,12 @@ df.columns = (
 )
 
 print("\nColumnas estandarizadas correctamente.")
+
+
+# ELIMINAR FILAS DUPLICADAS
+df.drop_duplicates(inplace=True)
+
+# ELIMINAR FILAS COMPLETAMENTE VACÍAS
+df.dropna(how="all", inplace=True)
+
+print("\nFilas duplicadas y vacías eliminadas.")
