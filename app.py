@@ -76,3 +76,37 @@ limite_nulos = len(df) * 0.70
 df = df.loc[:, df.isnull().sum() < limite_nulos]
 
 print("\nTratamiento de nulos finalizado.")
+
+# Ordenar columnas alfabéticamente
+df = df.reindex(sorted(df.columns), axis=1)
+
+# Reiniciar índices
+df.reset_index(drop=True, inplace=True)
+
+# INFORMACIÓN FINAL
+print("\n================ DATASET LIMPIO ================")
+
+print("\nDimensiones finales:")
+print(df.shape)
+
+print("\nTipos de datos:")
+print(df.dtypes)
+
+print("\nPrimeras filas:")
+print(df.head())
+
+print("\nÚltimas filas:")
+print(df.tail())
+
+print("\nInformación general:")
+print(df.info())
+
+# EXPORTAR DATASET LIMPIO
+df.to_csv(
+    "nasa_exoplanet_intelligence_clean.csv",
+    index=False
+)
+
+print(
+    "\nDataset limpio y estandarizado guardado correctamente."
+)
