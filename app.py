@@ -1,19 +1,27 @@
 import pandas as pd
 import numpy as np
+from datetime import datetime
 
-# LECTURA DEL DATASET
-df = pd.read_csv("nasa_exoplanet_intelligence.csv",sep=",")
+ARCHIVO_ENTRADA = "nasa_exoplanet_intelligence.csv"
+ARCHIVO_SALIDA = "nasa_exoplanet_intelligence_clean.csv"
+REPORTE_LIMPIEZA = "dataset_limpio.txt"
 
-# INFORMACIÓN ORIGINAL
-print("\nDATASET ORIGINAL")
+print("\n================ CARGANDO DATASET ================\n")
 
-print(f"Filas originales: {df.shape[0]}")
-print(f"Columnas originales: {df.shape[1]}")
+df = pd.read_csv(
+    ARCHIVO_ENTRADA,
+    sep=","
+)
 
-# ELIMINAR COLUMNAS DUPLICADAS
+filas_originales = df.shape[0]
+columnas_originales = df.shape[1]
+
+print("=============== DATASET ORIGINAL ===============")
+print(f"Filas originales: {filas_originales}")
+print(f"Columnas originales: {columnas_originales}")
+
 df = df.loc[:, ~df.columns.duplicated()]
 
-# LIMPIEZA DE LOS NOMBRES DE LAS COLUMNAS
 df.columns = (
     df.columns
     .str.strip()
@@ -24,27 +32,26 @@ df.columns = (
 
 print("\nColumnas estandarizadas correctamente.")
 
+filas_antes = len(df)
 
-# ELIMINAR FILAS DUPLICADAS
 df.drop_duplicates(inplace=True)
-
-# ELIMINAR FILAS COMPLETAMENTE VACÍAS
 df.dropna(how="all", inplace=True)
 
+filas_eliminadas = filas_antes - len(df)
+
 print("\nFilas duplicadas y vacías eliminadas.")
+print(f"Filas eliminadas: {filas_eliminadas}")
 
-for col in df.select_dtypes(include="object"):
+columnas_texto = df.select_dtypes(include="object").columns
 
-    # Convertir a string
+for col in columnas_texto:
+
     df[col] = df[col].astype(str)
 
-    # Eliminar espacios innecesarios
     df[col] = df[col].str.strip()
 
-    # Convertir texto a minúsculas
     df[col] = df[col].str.lower()
 
-    # Reemplazar valores vacíos por NaN
     df[col] = df[col].replace(
         ["", " ", "nan", "none", "null"],
         np.nan
@@ -52,38 +59,56 @@ for col in df.select_dtypes(include="object"):
 
 print("\nTexto normalizado correctamente.")
 
+columnas_antes = len(df.columns)
 
-# Eliminar columnas completamente vacías
 df.dropna(axis=1, how="all", inplace=True)
 
-# Eliminar columnas con un único valor
+columnas_vacias_eliminadas = columnas_antes - len(df.columns)
+
+print(f"\nColumnas vacías eliminadas: {columnas_vacias_eliminadas}")
+
+columnas_eliminadas = []
+
 for col in df.columns:
 
     if df[col].nunique(dropna=True) <= 1:
 
-        print(f"\nColumna eliminada por poca utilidad: {col}")
+        columnas_eliminadas.append(col)
 
-        df.drop(columns=col, inplace=True)
+if columnas_eliminadas:
 
-# Mostrar valores nulos
+    df.drop(columns=columnas_eliminadas, inplace=True)
+
+    print("\nColumnas eliminadas por poca utilidad:")
+
+    for col in columnas_eliminadas:
+        print(f"- {col}")
+
 print("\n================ VALORES NULOS ================\n")
 
 print(df.isnull().sum())
 
-# Eliminar columnas con más del 70% de nulos
 limite_nulos = len(df) * 0.70
+
+columnas_antes_nulos = len(df.columns)
 
 df = df.loc[:, df.isnull().sum() < limite_nulos]
 
+columnas_nulos_eliminadas = columnas_antes_nulos - len(df.columns)
+
 print("\nTratamiento de nulos finalizado.")
+print(f"Columnas eliminadas por exceso de nulos: {columnas_nulos_eliminadas}")
 
-# Ordenar columnas alfabéticamente
-df = df.reindex(sorted(df.columns), axis=1)
+df = df.reindex(
+    sorted(df.columns),
+    axis=1
+)
 
-# Reiniciar índices
-df.reset_index(drop=True, inplace=True)
+df.reset_index(
+    drop=True,
+    inplace=True
+)
 
-# INFORMACIÓN FINAL
 print("\n================ DATASET LIMPIO ================")
 
 print("\nDimensiones finales:")
@@ -101,12 +126,37 @@ print(df.tail())
 print("\nInformación general:")
 print(df.info())
 
-# EXPORTAR DATASET LIMPIO
 df.to_csv(
-    "nasa_exoplanet_intelligence_clean.csv",
+    ARCHIVO_SALIDA,
     index=False
 )
 
-print(
-    "\nDataset limpio y estandarizado guardado correctamente."
-)
+print("\nDataset limpio exportado correctamente.")
+
+with open(REPORTE_LIMPIEZA, "w", encoding="utf-8") as archivo:
+
+    archivo.write("=====================================\n")
+    archivo.write("      REPORTE DE LIMPIEZA DATASET\n")
+    archivo.write("=====================================\n\n")
+
+    archivo.write(f"Fecha: {datetime.now()}\n\n")
+
+    archivo.write("INFORMACIÓN ORIGINAL\n")
+    archivo.write(f"Filas originales: {filas_originales}\n")
+    archivo.write(f"Columnas originales: {columnas_originales}\n\n")
+
+    archivo.write("INFORMACIÓN FINAL\n")
+    archivo.write(f"Filas finales: {df.shape[0]}\n")
+    archivo.write(f"Columnas finales: {df.shape[1]}\n\n")
+
+    archivo.write("COLUMNAS ELIMINADAS\n")
+
+    if columnas_eliminadas:
+        for col in columnas_eliminadas:
+            archivo.write(f"- {col}\n")
+    else:
+        archivo.write("No se eliminaron columnas.\n")
+
+    archivo.write("\nDataset limpio correctamente.\n")
+
+print("\nReporte generado: dataset_limpio.txt")
