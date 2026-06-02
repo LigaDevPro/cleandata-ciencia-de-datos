@@ -1,6 +1,6 @@
-# Entrega N°2 - Ciencia de Datos
+# Entrega N°3 - Ciencia de Datos
 
-Este repositorio contiene la entrega de la **actividad número 2**
+Este repositorio contiene la entrega de la **actividad número 3**
 para la materia **Ciencia de Datos**.
 
 ---
@@ -8,7 +8,7 @@ para la materia **Ciencia de Datos**.
 ##  Integrantes
 
 - Agustin Gibaut
-- Nachito Cantoni
+- Ignacio Matias Cantoni
 - Agustin Ceballos
 - Miguel Scaccia
 - Pablo Peralta
@@ -18,11 +18,21 @@ para la materia **Ciencia de Datos**.
 
 ##  Objetivo
 
-El objetivo de este trabajo es **preparar los datos** para su posterior análisis,
-aplicando buenas prácticas de ciencia de datos.
+El objetivo de este trabajo es **realizar un analisis exploratorio**, obteniendo
+informacion descriptiva, deteccion de patrones y primeras conclusiones.
 
 ---
 
 ##  EL PROYECTO CUMPLE CON
-- ✔️ Limpieza de datos
-- ✔️ Generación de dataset final
+- ✔️ Analisis descriptivo
+- ✔️ Deteccion de patrones
+- ✔️ Primeras conclusiones
+##  ESTE CONTENIDO CORRESPONDE A ENTREGA N°4
+- ✔️ Graficos exploratorios
+
+---
+
+##  Entregables
+
+- Notebook: `analisis_explorativo.ipynb`
+- Dataset: `nasa_exoplanet_intelligence_clean.csv`
