@@ -1,4 +1,4 @@
-# Entrega N°3 - Ciencia de Datos
+# Entrega Final - Ciencia de Datos
 
 Este repositorio contiene la entrega de la **actividad número 3**
 para la materia **Ciencia de Datos**.
